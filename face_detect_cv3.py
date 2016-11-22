@@ -7,7 +7,6 @@ def count_faces(file):
     imagePath = file
     #print(os.walk('/Users/erikrudie/desktop/code/FaceDetect'))
     cascPath = "haarcascade_frontalface_default.xml"
-    #haarcascade_frontalface_default.xml
 
     # Create the haar cascade
     faceCascade = cv2.CascadeClassifier(cascPath)
@@ -30,12 +29,13 @@ def count_faces(file):
 
 for subdir, dirs, files in os.walk('/Users/erikrudie/desktop/code/FaceDetect/filter_here'):
     for file in files:
+        print(file)
         filepath = subdir + os.sep + file
 
-        if filepath.endswith(".jpg" or ".png"):
+        if filepath.endswith((".png", ".jpg")):
             try:
                 count_faces(filepath)
             except: # catch *all* exceptions
                 e = sys.exc_info()[0]
-                write_to_page( "<p>Error: %s</p>" % e )
+                print( "<p>Error: %s</p>" % e )
 
