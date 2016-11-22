@@ -1,31 +1,41 @@
 import cv2
 import sys
+import os
 
-# Get user supplied values
-imagePath = sys.argv[1]
-cascPath = sys.argv[2]
+def count_faces(file):
+    # Get user supplied values
+    imagePath = file
+    #print(os.walk('/Users/erikrudie/desktop/code/FaceDetect'))
+    cascPath = "haarcascade_frontalface_default.xml"
+    #haarcascade_frontalface_default.xml
 
-# Create the haar cascade
-faceCascade = cv2.CascadeClassifier(cascPath)
+    # Create the haar cascade
+    faceCascade = cv2.CascadeClassifier(cascPath)
 
-# Read the image
-image = cv2.imread(imagePath)
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Read the image
+    image = cv2.imread(imagePath)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Detect faces in the image
-faces = faceCascade.detectMultiScale(
-    gray,
-    scaleFactor=1.1,
-    minNeighbors=5,
-    minSize=(30, 30)
-    #flags = cv2.CV_HAAR_SCALE_IMAGE
-)
+    # Detect faces in the image
+    faces = faceCascade.detectMultiScale(
+                                         gray,
+                                         scaleFactor=1.1,
+                                         minNeighbors=5,
+                                         minSize=(30, 30)
+                                         )
 
-print("Found {0} faces!".format(len(faces)))
+    print("Found {0} faces!".format(len(faces)))
 
-# Draw a rectangle around the faces
-for (x, y, w, h) in faces:
-    cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-cv2.imshow("Faces found", image)
-cv2.waitKey(0)
+
+for subdir, dirs, files in os.walk('/Users/erikrudie/desktop/code/FaceDetect/filter_here'):
+    for file in files:
+        filepath = subdir + os.sep + file
+
+        if filepath.endswith(".jpg" or ".png"):
+            try:
+                count_faces(filepath)
+            except: # catch *all* exceptions
+                e = sys.exc_info()[0]
+                write_to_page( "<p>Error: %s</p>" % e )
+
